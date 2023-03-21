@@ -1,0 +1,39 @@
+//SPDX-License-Identifier: MIT
+
+pragma solidity 0.8.15;
+
+// Child smart contract
+contract PaymentReceived {
+    address public from;
+    uint public amount;
+
+    constructor(address _from, uint _amount) {
+        from = _from;
+        amount = _amount;
+    }
+}
+
+contract Wallet {
+    PaymentReceived public payment;
+
+    function payContract() public payable {
+        payment = new PaymentReceived(msg.sender, msg.value);
+    }
+}
+
+// Structs
+contract Wallet2 {
+    // Structs costs less gas as compared to child contracts
+    struct PaymentReceivedStruct {
+        address from;
+        uint amount;
+    }
+
+    PaymentReceivedStruct public payment;
+
+    function payContract() public payable {
+        //payment.from = msg.sender;
+        //payment.amount = msg.value;
+        payment = PaymentReceivedStruct(msg.sender, msg.value);
+    }
+}
